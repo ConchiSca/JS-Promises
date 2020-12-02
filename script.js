@@ -1,0 +1,90 @@
+/*
+Exercise 1:
+Write a function testNum that takes a number as
+ an argument and returns a Promise that tests if 
+ the value is less than or greater than the value 
+ 10. Log the result to the console.
+*/
+
+const number = 11;
+
+const isItGreater = new Promise(
+    (resolve, reject) => {
+        if (number > 10) {
+            resolve(number + ' is bigger than 10');
+        } else {
+            const itIsLower = new Error(number + ' is lower than 10')
+            reject(itIsLower);
+        }
+    }
+)
+
+const testNum = (number) => {
+    isItGreater
+    .then(function(resolved) {
+        console.log(resolved)
+    })
+    .catch(function(error) {
+        console.log(error.message)
+    })
+};
+
+testNum();
+
+
+/*
+Exercise 2:
+Write two functions that use Promises that you can chain!
+The first function, makeAllCaps(), will take in an array 
+of words and capitalize them, and then the second 
+function, sortWords(), will sort the words in alphabetical
+order. If the array contains anything but strings, it 
+should throw an error.
+Then call these functions by *chaining* the promises
+*/
+
+
+const makeAllCaps = words => {
+    return new Promise((resolve, reject) => {
+      if (
+        words.every(word => {
+          return typeof word === 'string';
+        })
+      ) {
+        resolve(
+          sortWords(
+            words.map(word => {
+              return word.toUpperCase();
+            })
+          )
+        );
+      } else {
+        reject('Oeps!');
+      }
+    });
+  };
+
+  const sortWords = words => {
+    return new Promise((resolve, reject) => {
+      if (words) {
+        resolve(words.sort());
+      } else {
+        reject('not a string!');
+      }
+    });
+  };
+
+  // hier had ik een aantal fouten gemaakt...
+
+const arrayOfWords = ['cucumber', 'tomatos', 'avocado'];
+    makeAllCaps(arrayOfWords)
+    .then(sortWords(arrayOfWords))
+    .then(result => console.log(result))
+    .catch(error => console.log(error));
+
+const complicatedArray = ['cucumber', 44, true];
+    makeAllCaps(complicatedArray)
+    .then(sortWords(complicatedArray))
+    .then(result => console.log(result))
+    .catch(error => console.log(error));
+
